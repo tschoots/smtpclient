@@ -18,5 +18,5 @@ type Mail struct {
 	Subject      string
 	FromEmail    string
 	Body         string
-	Attachments  []Attachment
+	Attachments  *[]Attachment
 }
