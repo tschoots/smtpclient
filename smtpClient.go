@@ -39,7 +39,7 @@ func (s *SmtpClient) Send() {
 
 	message := part1 + part2
 
-	for _, attachment := range s.Mail.Attachments {
+	for _, attachment := range *s.Mail.Attachments {
 
 		// read and encode attachment
 		content, _ := ioutil.ReadFile(attachment.FilePath)
@@ -58,11 +58,12 @@ func (s *SmtpClient) Send() {
 		buf.WriteString(encoded[nbrLines*lineMaxLength:])
 
 		//part 3 will be the attachment
-		part3 := fmt.Sprintf("\r\nContent-Type: application/csv; name=\"%s\"\r\nContent-Transfer-Encoding:base64\r\nContent-Disposition: attachment; filename=\"%s\"\r\n\r\n%s\r\n--%s--", attachment.FilePath, attachment.FileName, buf.String(), marker)
+		part3 := fmt.Sprintf("\r\nContent-Type: application/csv; name=\"%s\"\r\nContent-Transfer-Encoding:base64\r\nContent-Disposition: attachment; filename=\"%s\"\r\n\r\n%s\r\n\r\n--%s", attachment.FilePath, attachment.FileName, buf.String(), marker)
 		message = message + part3
 	}
 
 	message = message + "--"
+	fmt.Printf("mail:\n%s\n\n", message)
 
 	
 
